@@ -10,6 +10,9 @@ class CalcGridLayout(GridLayout):
             except:
                 self.display.text = 'Error'
 
+    def clear(self):
+        self.display.text = ''
+
 
 class MainApp(App):
 
