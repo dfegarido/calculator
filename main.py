@@ -18,6 +18,13 @@ class CalcGridLayout(GridLayout):
         # When click the AC button it clear the display
         self.display.text = ''
 
+class AddMemory(CalcGridLayout):
+    
+
+
+class SubMemory():
+    pass
+
 
 class MainApp(App):
 
