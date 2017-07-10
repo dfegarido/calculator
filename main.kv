@@ -1,3 +1,5 @@
+
+
 <Custom@Button>
     font_size:'30dp'
 
@@ -26,13 +28,13 @@
             on_press: calc.clear()
         Custom:
             text: 'M+'
-            on_press: entry.text += self.text
+            on_press: calc.add_mem(entry.text)
         Custom:
             text: 'M-'
-            on_press: entry.text += self.text
+            on_press: calc.sub_mem(entry.text)
         Custom:
-            text: 'M'
-            on_press: entry.text += self.text
+            text: 'MRC'
+            on_press: calc.mrc_mem()
 
     CustomBox:
 
