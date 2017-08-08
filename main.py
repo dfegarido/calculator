@@ -1,12 +1,17 @@
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.lang import Builder
+from kivy.config import Config
+
+Config.set('graphics','width','300')
+Config.set('graphics','height','500')
+Config.set('graphics','borderless','0')
 
 Builder.load_string('''
 
 
 <Custom@Button>
-    font_size:'30dp'
+    font_size:'20dp'
 
 
 <CustomBox@BoxLayout>
@@ -23,7 +28,7 @@ Builder.load_string('''
     BoxLayout:
         TextInput:
             id: entry
-            font_size: '70dp'
+            font_size: '30dp'
             multiline: False
 
     CustomBox:
@@ -92,6 +97,7 @@ Builder.load_string('''
             text: '0'
             on_press: entry.text += self.text
         Custom:
+            id: equal
             text: '='
             on_press: calc.calC(entry.text)
         Custom:
@@ -104,9 +110,17 @@ Builder.load_string('''
 
 
 
-test_x = []
+
 
 class CalcGridLayout(GridLayout):
+
+
+    def __init__(self, **kwargs):
+        super(CalcGridLayout, self).__init__(**kwargs)
+        self.memory = []
+        self.clear()
+
+        
 
      # Calculate the input numbers
 
@@ -116,7 +130,8 @@ class CalcGridLayout(GridLayout):
                 self.display.text = str(eval(calculate))
             except:
                 #comes an error if wrong syntax
-                self.display.text = 'Error'
+                #self.display.text = ''
+                return False
 
     def clear(self):
         # When click the AC button it clear the display
@@ -126,29 +141,47 @@ class CalcGridLayout(GridLayout):
     # add the sum to local memory
 
     def add_mem(self, positive):
-        global test_x
+        memory = self.memory
+
         if positive:
-            try:
-                test_x.append(float('+{}'.format(positive)))
-                print(test_x)
-                self.display.text = ''
-            except:
-                self.display.text = "Error"
+            positive = eval(positive)
+            memory.append(float(positive))
+            print(memory)
+            self.display.text = str(positive)
+        else:
+            self.display.text = ""
 
     #subtract the sum from the local memory
     def sub_mem(self, negative):
-        global test_x
-        test_x.append(float('-{}'.format(negative)))
-        print(test_x)
-        self.display.text = ''
+        memory = self.memory
+        
+        if negative:
+            negative = eval(negative)
+            if int(negative) <= 0.0:
+                print(negative)
+                memory.append(float(int(negative)))
+                self.display.text = str(negative)
+            else:
+                memory.append(float(int('-{}'.format(negative))))
+                self.display.text = str(negative)
+        print(memory)
+        return True
+        
 
     def mrc_mem(self):
         try:
-            self.display.text = str(sum(test_x))
+            self.display.text = str(sum(self.memory))
         except:
             self.display.text = "Error"
+            return False
 
         return True
+
+    def clear(self):
+        equal_button = self.ids['equal'].state
+        print(equal_button)
+        if equal_button == 'down':
+            self.display.text = ''
 
 
 
